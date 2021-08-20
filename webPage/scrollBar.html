@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滚动条</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-size: 12px;
+        }
+        .w {
+            margin-top: 10px;
+            width: 1200px;
+            margin: 5px auto;
+            border-radius: 10px;
+            text-align: center;
+            color: #fff;
+        }
+        header {
+            background-color: purple;
+            height: 30px;
+            line-height: 30px;
+        }
+        nav {
+            background-color: goldenrod;
+            height: 150px;
+            line-height: 150px;
+        }
+        .banner {
+            background-color: darkorange;
+            height: 400px;
+            line-height: 400px;
+        }
+        section {
+            background-color: skyblue;
+            height: 1000px;
+            line-height: 1000px;
+        }
+        footer {
+            background-color: gray;
+            height: 150px;
+            line-height: 150px;
+        }
+        .ad {
+            position: absolute;
+            top: 300px;
+            left: 50%;
+            transform: translateX(610px);
+            width: 50px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            color: #fff;
+        }
+        .bar, 
+        .back {
+            display: inline-block;
+            width: 48px;
+            border-radius: 10px;
+            margin: 1px 0;
+        }
+        .bar {
+            height: 250px;
+            background-color: pink;
+            line-height: 250px;
+        }
+        .back {
+            display: none;
+            height: 48px;
+            background-color: gold;
+            line-height: 48px;
+            margin-left: 1px;
+            cursor: pointer;
+        }
+        .back:hover {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <header class="header w">头部区域</header>
+    <nav class="w">导航区域</nav>
+    <div class="banner w">banner区域</div>
+    <section class="w">主体部分</section>
+    <footer class="w">底端区域</footer>
+    <div class="ad">
+        <div class="bar">导航条</div>
+        <div class="back">返回顶部</div>
+    </div>
+    <script>
+        var banner = document.getElementsByClassName('banner')[0]
+        var ad = document.getElementsByClassName('ad')[0]
+        var section = document.getElementsByTagName('section')[0]
+        var back = document.getElementsByClassName('back')[0]
+
+        const sectionoffsetY = section.offsetTop
+        const originHeight = ad.offsetTop
+        const offsetHeight = ad.offsetTop - banner.offsetTop
+
+        window.onscroll = function() {
+            if(document.documentElement.scrollTop >= banner.offsetTop) {
+                ad.style.position = 'fixed'
+                ad.style.top = offsetHeight + 'px'
+            }
+            else{
+                ad.style.position = 'absolute'
+                ad.style.top = originHeight + 'px'
+            }
+
+            back.style.display = (document.documentElement.scrollTop >= sectionoffsetY ? 'block' : 'none')
+        }
+        back.addEventListener('click',function(){
+            var scrollTimer = setInterval(function(){
+                var nextY = document.documentElement.scrollTop
+                if(nextY > 0){
+                    window.scroll(0, nextY - 30)
+                }
+                else{
+                    clearInterval(scrollTimer)
+                    scrollTimer = null
+                }
+                // console.log('run')
+            },15)
+        })
+    </script>
+</body>
+</html>
