@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手风琴示例</title>
+    <script src='jquery.min.js'></script>
+    <style>
+        .accordion {
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .accordion img {
+            position: absolute;
+            top: 50px;
+            transition: all .5s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="accordion"></div>
+    <script>
+        var accordion = document.getElementsByClassName('accordion')[0]
+        imgSrc = [
+            "https://d301.paixin.com/thumbs/6867848/103065800/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/3461853/74969053/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/7401550/101445634/staff_1024.jpg",
+            "https://d302.paixin.com/thumbs/7144652/154330212/staff_1024.jpg",
+            "https://d302.paixin.com/thumbs/1006362/137472494/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/2534661/58769213/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/3461853/121987896/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/8506396/115960382/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/1006362/115105232/staff_1024.jpg"
+        ]
+        const accordionLength = imgSrc.length
+        var preIndex = accordionLength - 1
+        var currentIndex = 0
+
+        // 手风琴参数设置
+        const imgWidth = 600        // 图片的宽，单位px
+        const imgHeight = 400       // 图片的高，单位px
+        const imgPadding = 2        // 图片展开时与下一张图片的间距，单位px
+        const offsetWidth = 50      // 图片折叠时裸露的部分的宽度，单位px
+        const imgBorderRadius = 5   // 图片的圆角，单位px
+
+        accordion.style.width = imgWidth + (accordionLength - 1) * offsetWidth + 'px'
+        accordion.style.height = imgHeight + 100 + 'px'
+        for (var i = 0; i < accordionLength; i++) {
+            var img = document.createElement('img')
+            // 创建img标签的属性值
+            img.setAttribute('index', i)
+            img.style.left = i * offsetWidth + 'px'
+            img.src = imgSrc[i]
+            img.style.width = imgWidth + 'px'
+            img.style.height = imgHeight + 'px'
+            img.style.borderRadius = imgBorderRadius + 'px'
+            accordion.appendChild(img)
+
+            // 为图片添加鼠标悬停事件
+            img.addEventListener('mouseover', function () {
+                var currentIndex = parseInt(this.getAttribute('index'))
+                if (currentIndex > preIndex) {
+                    for (var j = preIndex + 1; j <= currentIndex; j++) {
+                        accordion.children[j].style.left = j * offsetWidth + 'px'
+                    }
+                }
+                else if (currentIndex < preIndex) {
+                    for (var j = currentIndex + 1; j <= preIndex; j++) {
+                        accordion.children[j].style.left = (j - 1) * offsetWidth + imgWidth + imgPadding + 'px'
+                    }
+                }
+                preIndex = currentIndex
+            })
+        }
+    </script>
+</body>
+
+</html>
