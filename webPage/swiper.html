@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        .swiper {
+            position: relative;
+            overflow: hidden;
+            width: 600px;
+            height: 400px;
+            background-color: pink;
+            margin: 50px auto;
+            border-radius: 10px;
+        }
+
+        .swiper img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .leftBtnIn {
+            animation: leftIn 0.3s linear forwards;
+        }
+
+        @keyframes leftIn {
+            0% {
+                transform: translate(-100%, -50%);
+            }
+
+            100% {
+                transform: translate(0, -50%);
+            }
+        }
+
+        .rightBtnIn {
+            animation: rightIn 0.3s linear forwards;
+        }
+
+        @keyframes rightIn {
+            0% {
+                transform: translate(100%, -50%);
+            }
+
+            100% {
+                transform: translate(0, -50%);
+            }
+        }
+
+        .leftBtnOut {
+            animation: leftOut 0.3s linear forwards;
+        }
+
+        @keyframes leftOut {
+            100% {
+                transform: translate(-100%, -50%);
+            }
+        }
+
+        .rightBtnOut {
+            animation: rightOut 0.3s linear forwards;
+        }
+
+        @keyframes rightOut {
+            100% {
+                transform: translate(100%, -50%);
+            }
+        }
+
+        .leftBtn,
+        .rightBtn {
+            display: none;
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 40px;
+            background-color: rgba(0, 0, 0, .5);
+            transform: translate(0, -50%);
+        }
+
+        .leftBtn {
+            left: 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .leftBtn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            width: 15px;
+            height: 15px;
+            border-left: 1px solid #fff;
+            border-bottom: 1px solid #fff;
+            transform: translate(-25%, -50%) rotate(45deg);
+        }
+
+        .leftBtn:hover::after {
+            border-width: 2px;
+            border-left-color: darkorange;
+            border-bottom-color: darkorange;
+        }
+
+        .rightBtn {
+            right: 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .rightBtn::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            width: 15px;
+            height: 15px;
+            border-right: 1px solid #fff;
+            border-top: 1px solid #fff;
+            transform: translate(-75%, -50%) rotate(45deg);
+        }
+
+        .rightBtn:hover::after {
+            border-width: 2px;
+            border-right-color: darkorange;
+            border-top-color: darkorange;
+        }
+
+        .indicator {
+            position: absolute;
+            left: 50%;
+            bottom: 30px;
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            background-color: rgba(255, 2255, 255, .3);
+            transform: translateX(-50%);
+            border-radius: 15px;
+        }
+
+        .indicator span {
+            display: inline-block;
+            background-color: #fff;
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            margin: 0 5px;
+        }
+
+        .indicator span:hover {
+            cursor: pointer;
+            background-color: darkorange;
+        }
+
+        .spanHover {
+            background-color: darkorange !important;
+        }
+    </style>
+    <script>
+        window.onload = function () {
+            var imgarr = [
+                'https://d301.paixin.com/thumbs/6597960/106466058/staff_1024.jpg',
+                'https://d302.paixin.com/thumbs/1144687/179341734/staff_1024.jpg',
+                'https://d300.paixin.com/thumbs/1052036/6114612/staff_1024.jpg'
+            ]
+            var swiper = document.getElementsByClassName('swiper')[0]
+            var leftBtn = document.getElementsByClassName('leftBtn')[0]
+            var rightBtn = document.getElementsByClassName('rightBtn')[0]
+            var indicator = document.getElementsByClassName('indicator')[0]
+            var img = swiper.getElementsByTagName('img')[0]
+            var currentIndex = 0
+            var imgarrLength = imgarr.length
+            var flag = false
+
+            function dotChange(dot_obj, targetIndex, img_obj, imgArrayList) {
+                for (var i = 0; i < imgarrLength; i++) {
+                    if (i === targetIndex) {
+                        dot_obj.children[i].className = 'spanHover'
+                    }
+                    else {
+                        dot_obj.children[i].className = ''
+                    }
+                }
+                img_obj.src = imgArrayList[currentIndex]
+            }
+
+            for (var i = 0; i < imgarrLength; i++) {
+                var dot = document.createElement('span')
+                dot.setAttribute('index', i)
+                indicator.appendChild(dot)
+            }
+
+            img.src = imgarr[0]
+            indicator.children[0].className = 'spanHover'
+
+            indicator.addEventListener('click', function (e) {
+                var copy = parseInt(e.target.getAttribute('index'))
+                // console.log(currentIndex)
+                if (copy !== -1) {
+                    currentIndex = copy
+                    dotChange(indicator, currentIndex, img, imgarr)
+                    resetTimer()
+                }
+            }, true)
+
+            swiper.addEventListener('mouseover', function () {
+                leftBtn.className = 'leftBtn leftBtnIn'
+                leftBtn.style.display = 'block'
+                rightBtn.className = 'rightBtn rightBtnIn'
+                rightBtn.style.display = 'block'
+            })
+
+            swiper.addEventListener('mouseout', function () {
+                leftBtn.className = 'leftBtn leftBtnOut'
+                rightBtn.className = 'rightBtn rightBtnOut'
+            })
+
+            leftBtn.addEventListener('click', function () {
+                currentIndex = (currentIndex === 0 ? imgarrLength - 1 : --currentIndex)
+                dotChange(indicator, currentIndex, img, imgarr)
+                resetTimer()
+            })
+
+            rightBtn.addEventListener('click', function () {
+                currentIndex = (currentIndex === imgarrLength - 1 ? 0 : ++currentIndex)
+                dotChange(indicator, currentIndex, img, imgarr)
+                resetTimer()
+            })
+
+            img.addEventListener('mouseenter', function () {
+                clearInterval(swiper)
+                swiper = null
+            })
+
+            img.addEventListener('mouseleave', function () {
+                swiper = setInterval(function () {
+                    // 执行手动事件
+                    rightBtn.click()
+                }, 2000)
+            })
+
+            var swiper = setInterval(function () {
+                // 执行手动事件
+                rightBtn.click()
+            }, 2000)
+
+            function resetTimer() {
+                clearInterval(swiper)
+                swiper = null
+                swiper = setInterval(function () {
+                    // 执行手动事件
+                    rightBtn.click()
+                }, 2000)
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div class="swiper">
+        <div class="leftBtn"></div>
+        <div class="rightBtn"></div>
+        <img src="" alt="">
+        <div class="indicator" index="-1"></div>
+    </div>
+</body>
+
+</html>
