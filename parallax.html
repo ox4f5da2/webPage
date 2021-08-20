@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视差滚动</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .parallax {
+            position: relative;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .parallax img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+        }
+
+        .parallax h3 {
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, .3);
+            z-index: 1;
+            font-size: 40px;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        var parallaxArray = [
+            { src: 'https://d300.paixin.com/thumbs/1007373/27906419/staff_1024.jpg', title: '塔特拉山海湖之眼' },
+            { src: 'https://d300.paixin.com/thumbs/1013513/5021225/staff_1024.jpg', title: '美丽的早上在春季前日出和码头' },
+            { src: 'https://d302.paixin.com/thumbs/14847044/176257250/staff_1024.jpg', title: '喜马拉雅山上的雪松' },
+            { src: 'https://d300.paixin.com/thumbs/1179847/27279003/staff_1024.jpg', title: '大瀑布' }
+        ]
+        // 初始化页面相关参数,图片宽高比为3:2,以下数据不用修改
+        const parallaxArrayLength = parallaxArray.length
+        const parallaxHeight = 600 // 单位px
+        const imgHeight = 67 // 单位vw
+        // 初始化页面元素
+        for (var i = 0; i < parallaxArrayLength; i++) {
+            var div = document.createElement('div')
+            var img = document.createElement('img')
+            var h3 = document.createElement('h3')
+            div.className = 'parallax'
+            div.style.height = parallaxHeight + 'px'
+            img.src = parallaxArray[i].src
+            img.style.height = imgHeight + 'vw'
+            div.appendChild(img)
+            h3.innerHTML = '「 ' + parallaxArray[i].title + ' 」'
+            h3.style.height = parallaxHeight + 'px'
+            h3.style.lineHeight = parallaxHeight + 'px'
+            div.appendChild(h3)
+            document.body.appendChild(div)
+        }
+
+        // 获取相应内容的宽度和高度
+        const bodyHeight = document.documentElement.offsetHeight
+        const bodyWidth = document.documentElement.offsetWidth
+        var parallax = document.querySelectorAll('.parallax')
+        window.addEventListener('scroll', function () {
+            var offsetY = window.pageYOffset
+            const ratio = offsetY / bodyHeight
+            var scrollY = ratio * (bodyWidth * imgHeight / 100 - parallaxHeight) // 把图片未显示的高度映射到整个滚动页面的高度
+            for (var i = 0; i < parallaxArrayLength; i++) {
+                parallax[i].children[0].style.top = -scrollY + 'px'
+            }
+        })
+
+        if(imgHeight * bodyWidth / 100 < parallaxHeight){
+            alert('parallaxHeight参数有问题!')
+        }
+    </script>
+</body>
+
+</html>
