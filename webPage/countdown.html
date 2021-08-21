@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒计时</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: url('https://d300.paixin.com/thumbs/1010263/10234143/staff_1024.jpg') no-repeat top center /cover;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .countdown {
+            width: 100vw;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .countdown p {
+            font-size: 12px;
+            color: #778899;
+        }
+
+        .countdown ul {
+            width: 100%;
+            text-align: center;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .countdown ul li {
+            margin-top: 10px;
+            margin-right: 5px;
+            color: #708090;
+        }
+
+        .countdown .number {
+            font-size: 30px;
+            color: #fff;
+            width: 40px;
+            height: 60px;
+            line-height: 60px;
+            background-color: #34495e;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="countdown">
+        <p>距离2022年1月1日还有:</p>
+        <ul>
+            <li class="number">5</li>
+            <li class="number">2</li>
+            <li class="number">0</li>
+            <li>天</li>
+            <li class="number">1</li>
+            <li class="number">3</li>
+            <li>时</li>
+            <li class="number">1</li>
+            <li class="number">4</li>
+            <li>分</li>
+            <li class="number">5</li>
+            <li class="number">9</li>
+            <li>秒</li>
+        </ul>
+    </div>
+    <script>
+        function calculateCountDown(targetDate) {
+            var nowTime = +new Date()
+            var targetTime = new Date(targetDate).getTime()
+            const offsetTime = targetTime - nowTime
+            var day = Math.floor(offsetTime / 1000 / 3600 / 24)
+            var hour = Math.floor(offsetTime / 1000 / 3600 % 24)
+            var minute = Math.floor(offsetTime / 1000 / 60 % 60)
+            var second = Math.floor(offsetTime / 1000 % 60)
+            return [
+                Math.floor(day / 100), Math.floor(day / 10 % 10), day % 10,
+                Math.floor(hour / 10), hour % 10,
+                Math.floor(minute / 10), minute % 10,
+                Math.floor(second / 10), second % 10
+            ]
+        }
+        var countdown = document.querySelector('.countdown')
+        var number_li = countdown.querySelectorAll('.number')
+        var timer = setInterval(function () {
+            var numberArr = calculateCountDown('2022-1-1')
+            for (var i = 0; i < number_li.length; i++) {
+                number_li[i].innerHTML = numberArr[i]
+            }
+        }, 1000)
+
+    </script>
+</body>
+
+</html>
