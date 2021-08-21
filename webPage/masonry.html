@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流式布局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .masonry {
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .masonry img {
+            box-sizing: border-box;
+            float: left;
+            border: 1px solid #ccc;
+            padding: 10px;
+            transition: all .5s;
+        }
+
+        .masonry img:hover {
+            cursor: pointer;
+            box-shadow: 0px 0px 5px #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="masonry"></div>
+    <script>
+        // 获得最小值下标函数
+        function getMinimumIndex(arr) {
+            var index = 0
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] < arr[index]) {
+                    index = i
+                }
+            }
+            return index
+        }
+
+        function loadPage(screenWidth, imgWidth) {
+            var img = masonry.querySelectorAll('img')
+            var maxNum = Math.floor(screenWidth / imgWidth)
+            masonry.style.marginLeft = (screenWidth - imgWidth * maxNum) / 2 + 'px'
+            var imgHeight = []
+            // 判断图片是否全部加载完成，如果未加载完成，那么盒子高度为:上边框 + 上内边距 + 下内边距 + 下边框
+            var imgIfLoadedTimer = setInterval(() => {
+                for (var i = 0; i < imgArrLength; i++) {
+                    if (img[i].offsetHeight === 2 * padding + 2) {
+                        break
+                    }
+                }
+                if (i === img.length) {
+                    clearInterval(imgIfLoadedTimer)
+                    for (var i = 0; i < imgArrLength; i++) {
+                        if (i < maxNum) {
+                            imgHeight[i] = img[i].offsetHeight
+                            img[i].style.position = 'static'
+                            img[i].style.marginTop = gap + 'px'
+                        }
+                        else {
+                            var minIndex = getMinimumIndex(imgHeight)
+                            img[i].style.marginTop = '0px'
+                            img[i].style.position = 'absolute'
+                            img[i].style.left = minIndex * imgWidth + 'px'
+                            img[i].style.top = imgHeight[minIndex] + 2 * gap + 'px'
+                            imgHeight[minIndex] += img[i].offsetHeight + gap
+                        }
+                    }
+                }
+                console.log('run')
+            }, 10)
+        }
+
+        // 初始化样式 originUrl--种子数组 imgArr--图片链接
+        var seedUrl = [
+            "https://d301.paixin.com/thumbs/7670718/107312646/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/1292828/92723720/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/1037171/110576732/staff_1024.jpg",
+            "https://d302.paixin.com/thumbs/1006362/125722756/staff_1024.jpg",
+            "https://d302.paixin.com/thumbs/1027484/153703692/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/1897095/83080196/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/7164006/100409134/staff_1024.jpg",
+            "https://d300.paixin.com/thumbs/1420973/19903293/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/1011434/115601534/staff_1024.jpg",
+            "https://d300.paixin.com/thumbs/1011382/28454079/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/2813967/67238767/staff_1024.jpg",
+            "https://d301.paixin.com/thumbs/1902695/85601914/staff_1024.jpg",
+            "https://d300.paixin.com/thumbs/1001594/1342473/staff_1024.jpg",
+            "https://d302.paixin.com/thumbs/1600374/143878163/staff_1024.jpg"
+        ]
+        var imgArr = []
+
+        // 只需改以下四个参数即可,其余代码不用更改
+        const imgWidth = 200  // 每张图片的宽度
+        const padding = 10  // 单位px,内边距不能大于盒子的一半宽度
+        const gap = 10  // 单位px,每个盒子之间的缝隙
+        const num = 50  // 随机生成的图片总数
+        var randomFlag = true  // 是否随机生成图片数组,如果选择false则显示种子数组
+
+        // 随机产生图片数组生成器 num--产生图片数量
+        if (randomFlag) {
+            const randomMax = seedUrl.length
+            for (var i = 0; i < num; i++) {
+                var random = Math.floor(Math.random() * randomMax)
+                imgArr.push(seedUrl[random])
+            }
+        }
+        else {
+            imgArr = seedUrl
+        }
+
+        // 页面生成img标签及样式
+        var masonry = document.querySelector('.masonry')
+        const imgArrLength = imgArr.length
+        for (var i = 0; i < imgArrLength; i++) {
+            var img = document.createElement('img')
+            img.style.width = imgWidth+ 'px'
+            img.style.padding = padding + 'px'
+            img.style.marginRight = gap + 'px'
+            img.src = imgArr[i]
+            masonry.appendChild(img)
+        }
+
+
+        window.addEventListener('load', function () {
+            loadPage(document.body.offsetWidth, imgWidth + gap)
+        })
+
+        window.addEventListener('resize', function () {
+            loadPage(document.body.offsetWidth, imgWidth + gap)
+        })
+    </script>
+</body>
+
+</html>
