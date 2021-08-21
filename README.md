@@ -12,3 +12,5 @@
 4.scrollBar.html--网页粘性布局+返回顶部动画滚动效果
 
 5.countdown.html--网页倒计时效果
+
+6.masonry.html--网页自适应式瀑布流效果+可更改图片相关参数
