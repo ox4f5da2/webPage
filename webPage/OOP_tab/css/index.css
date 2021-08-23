@@ -1,0 +1,130 @@
+.w {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.fr {
+    float: right;
+}
+
+.add {
+    height: 50px;
+    margin: 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.add input {
+    box-sizing: border-box;
+    width: 500px;
+    padding: 5px;
+    border-bottom: 1px solid grey;
+}
+
+.add span:last-child:hover {
+    cursor: pointer;
+    color: lightcoral;
+}
+
+.unfinished {
+    line-height: 20px;
+    margin-bottom: 10px;
+    font-family: 'icomoon';
+}
+.unfinished span:first-child::before{
+    content: '';
+    color: #333;
+    margin-right: 5px;
+}
+
+.unfinished span:last-child {
+    color: #fff;
+    height: 16px;
+    padding: 2px 8px;
+    border-radius: 16px 0 16px 16px;
+    background-color: red;
+}
+
+.note_box {
+    box-sizing: border-box;
+    width: 600px;
+    margin: 0 auto;
+}
+
+.note_box li {
+    width: 600px;
+    height: 50px;
+    background-color: #eff5ff;
+    color: #1b54b0;
+    font-weight: 700;
+    line-height: 50px;
+    padding-left: 16px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    transition: all .5s;
+}
+.note_box li:hover{
+    background-color: #eee;
+}
+.note_box li span:nth-child(2) {
+    margin-right: 16px;      
+}
+.note_box li span:nth-child(2):hover {
+    cursor: pointer;
+    color: red;
+}
+
+.note_box .currentLi {
+    animation: fadeIn .3s linear forwards;
+}
+@keyframes fadeIn {
+    0% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.note_box .downLi {
+    animation: down .3s linear forwards;
+}
+@keyframes down {
+    0% {
+        transform: translateY(-60px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.note_box .removeLi {
+    animation: remove .3s linear forwards;
+}
+@keyframes remove {
+    0% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%);
+        opacity: 0;
+    }
+}
+
+.note_box .upLi {
+    animation: up .3s linear forwards;
+    animation-delay: .3s;
+}
+@keyframes up {
+    0% {
+        transform: translateY(60px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}

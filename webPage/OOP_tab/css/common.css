@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'icomoon';
+    src: url('../fonts/icomoon.eot?lozcpx');
+    src: url('../fonts/icomoon.eot?lozcpx#iefix') format('embedded-opentype'),
+        url('../fonts/icomoon.ttf?lozcpx') format('truetype'),
+        url('../fonts/icomoon.woff?lozcpx') format('woff'),
+        url('../fonts/icomoon.svg?lozcpx#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    background: url('https://d303.paixin.com/thumbs/1811396/225000146/staff_1024.jpg') no-repeat top center;
+    background-size: 100% 100vh;
+    background-position: 0 0;
+}
+
+li {
+    list-style: none;
+}
+
+input {
+    outline: none;
+    background-color: transparent;
+    border: 0;
+}
+
+h3 {
+    margin-top: 30px;
+    text-align: center;
+    color: #333;
+}
+
+.icommon {
+    font-family: 'icomoon';
+}
