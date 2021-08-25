@@ -16,6 +16,12 @@
             list-style: none;
         }
 
+        body {
+            width: 100vw;
+            height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
         .swiper {
             position: relative;
             width: 600px;
@@ -187,16 +193,19 @@
             width: 40%;
             height: 35px;
             text-align: center;
+            position: relative;
         }
 
         .normal,
         .recycle {
-            background-color: skyblue;
+            background: linear-gradient(to right, #0162c8, #55e7fc);
             line-height: 35px;
             color: #fff;
             border-radius: 35px;
             cursor: pointer;
             box-shadow: 3px 3px 5px #ccc;
+            font-weight: 700;
+            overflow: hidden;
         }
 
         .normal {
@@ -208,8 +217,30 @@
         }
 
         .selected {
-            color: black;
-            font-weight: 700;
+            background: linear-gradient(to right, #755bea, #ff72c0);
+
+        }
+
+        .wave {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: wave .5s linear;
+        }
+
+        @keyframes wave {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: .7;
+            }
+
+            100% {
+                width: 320px;
+                height: 320px;
+                opacity: 0;
+            }
         }
     </style>
 </head>
@@ -237,7 +268,7 @@
             { src: "https://d301.paixin.com/thumbs/1006362/115105232/staff_1024.jpg", title: '山川' },
         ]
 
-        // methoda参数: right-normal right-recycle left-normal left-recyle
+        // method参数: right-normal right-recycle left-normal left-recyle
         function changeImg(method, fatherTag, imgArr, idx) {
             var img = fatherTag.querySelector('img');
             var temp = method.split('-');
@@ -257,12 +288,35 @@
             img.src = imgArr[idx].src;
             return idx;
         }
+
         // 清楚圆点类
         function clear(target, tag) {
             var arr = target.querySelectorAll(tag);
             for (var i = 0; i < arr.length; i++) {
                 target.children[i].className = '';
             }
+        }
+        
+        //水波涟漪效果
+        function wave(e, fatherTag) {
+            var wave = document.createElement('span');
+            var x = e.pageX - e.target.offsetLeft;
+            var y = e.pageY - e.target.offsetTop;
+            wave.className = 'wave';
+            wave.style.top = y + 'px';
+            wave.style.left = x + 'px';
+            fatherTag.appendChild(wave);
+        }
+
+        // 公共部分
+        function samePart(current, str, other, e) {
+            if (current.querySelector('.wave')) {
+                current.querySelector('.wave').remove();
+            }
+            method = str;
+            current.className = str + ' selected';
+            other.className = (str === 'normal' ? 'recycle' : 'normal');
+            wave(e, current);
         }
 
         const imgLength = imgSrc.length;
@@ -312,7 +366,7 @@
                 swiper.appendChild(img);
                 dot.className = 'spanHover';
             }
-            dot.addEventListener('click',function () {
+            dot.addEventListener('click', function () {
                 currentIndex = parseInt(this.getAttribute('index'));
                 swiper.querySelector('img').src = imgSrc[currentIndex].src;
                 swiper.setAttribute('data-title', imgSrc[currentIndex].title);
@@ -322,16 +376,12 @@
             indicator.appendChild(dot);
         }
 
-        normal.addEventListener('click', function () {
-            method = 'normal';
-            this.className = 'normal selected';
-            recycle.className = 'recycle';
+        normal.addEventListener('click', function (e) {
+            samePart(this, 'normal', recycle, e);
         })
 
-        recycle.addEventListener('click', function () {
-            method = 'recycle';
-            normal.className = 'normal';
-            this.className = 'recycle selected';
+        recycle.addEventListener('click', function (e) {
+            samePart(this, 'recycle', normal, e);
         })
 
     </script>
