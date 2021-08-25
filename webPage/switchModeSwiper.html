@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        .swiper {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 50px auto;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .swiper img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .swiper::before {
+            content: attr(data-title);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background-color: rgba(0, 0, 0, .3);
+            z-index: 999;
+            color: #fff;
+            text-align: center;
+            line-height: 40px;
+        }
+
+        .leftBtn,
+        .rightBtn {
+            display: none;
+            z-index: 999;
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 60px;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, .3);
+        }
+
+        .leftBtn {
+            left: 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .rightBtn {
+            transform: translateY(-50%);
+            right: 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .leftBtn::before,
+        .rightBtn::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        .leftBtn::before {
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: translate(-25%, -50%) rotate(45deg);
+        }
+
+        .rightBtn::before {
+            border-top: 2px solid #fff;
+            border-right: 2px solid #fff;
+            transform: translate(-75%, -50%) rotate(45deg);
+        }
+
+        .leftBtn:hover::before,
+        .rightBtn:hover::before {
+            border-color: orange;
+            cursor: pointer;
+        }
+
+        .leftBtnIn {
+            animation: leftIn 0.3s linear forwards;
+        }
+
+        @keyframes leftIn {
+            0% {
+                transform: translate(-100%, -50%);
+            }
+
+            100% {
+                transform: translate(0, -50%);
+            }
+        }
+
+        .rightBtnIn {
+            animation: rightIn 0.3s linear forwards;
+        }
+
+        @keyframes rightIn {
+            0% {
+                transform: translate(100%, -50%);
+            }
+
+            100% {
+                transform: translate(0, -50%);
+            }
+        }
+
+        .leftBtnOut {
+            animation: leftOut 0.3s linear forwards;
+        }
+
+        @keyframes leftOut {
+            100% {
+                transform: translate(-100%, -50%);
+            }
+        }
+
+        .rightBtnOut {
+            animation: rightOut 0.3s linear forwards;
+        }
+
+        @keyframes rightOut {
+            100% {
+                transform: translate(100%, -50%);
+            }
+        }
+
+        .indicator {
+            position: absolute;
+            left: 50%;
+            bottom: 20px;
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            background-color: rgba(255, 2255, 255, .3);
+            transform: translateX(-50%);
+            border-radius: 15px;
+            z-index: 999;
+        }
+
+        .indicator span {
+            display: inline-block;
+            background-color: #fff;
+            width: 10px;
+            height: 10px;
+            border-radius: 10px;
+            margin: 0 5px;
+        }
+
+        .indicator span:hover {
+            cursor: pointer;
+            background-color: darkorange;
+        }
+
+        .spanHover {
+            background-color: darkorange !important;
+        }
+
+        .option {
+            width: 400px;
+            height: 50px;
+            margin: 0 auto;
+        }
+
+        .option li {
+            width: 40%;
+            height: 35px;
+            text-align: center;
+        }
+
+        .normal,
+        .recycle {
+            background-color: skyblue;
+            line-height: 35px;
+            color: #fff;
+            border-radius: 35px;
+            cursor: pointer;
+            box-shadow: 3px 3px 5px #ccc;
+        }
+
+        .normal {
+            float: left;
+        }
+
+        .recycle {
+            float: right;
+        }
+
+        .selected {
+            color: black;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="swiper">
+        <div class="leftBtn"></div>
+        <div class="rightBtn"></div>
+        <div class="indicator"></div>
+    </div>
+    <ul class="option">
+        <li class="normal selected">普通模式</li>
+        <li class="recycle">循环模式</li>
+    </ul>
+    <script>
+        var imgSrc = [
+            { src: "https://d301.paixin.com/thumbs/6867848/103065800/staff_1024.jpg", title: '雪山' },
+            { src: "https://d301.paixin.com/thumbs/3461853/74969053/staff_1024.jpg", title: '湖泊' },
+            { src: "https://d301.paixin.com/thumbs/7401550/101445634/staff_1024.jpg", title: '热气球' },
+            { src: "https://d302.paixin.com/thumbs/7144652/154330212/staff_1024.jpg", title: '天空' },
+            { src: "https://d302.paixin.com/thumbs/1006362/137472494/staff_1024.jpg", title: '夕阳' },
+            { src: "https://d301.paixin.com/thumbs/2534661/58769213/staff_1024.jpg", title: '薰衣草' },
+            { src: "https://d301.paixin.com/thumbs/3461853/121987896/staff_1024.jpg", title: '秋季' },
+            { src: "https://d301.paixin.com/thumbs/8506396/115960382/staff_1024.jpg", title: '大海' },
+            { src: "https://d301.paixin.com/thumbs/1006362/115105232/staff_1024.jpg", title: '山川' },
+        ]
+
+        // methoda参数: right-normal right-recycle left-normal left-recyle
+        function changeImg(method, fatherTag, imgArr, idx) {
+            var img = fatherTag.querySelector('img');
+            var temp = method.split('-');
+            idx = (temp[0] === 'right' ? ++idx : --idx);
+            if (temp[1] === 'recycle') {
+                if (idx === -1)
+                    idx = imgArr.length - 1;
+                else if (idx === imgArr.length)
+                    idx = 0;
+            }
+            else if (temp[1] === 'normal') {
+                if (idx === -1)
+                    idx = 0;
+                else if (idx === imgArr.length)
+                    idx = imgArr.length - 1;
+            }
+            img.src = imgArr[idx].src;
+            return idx;
+        }
+        // 清楚圆点类
+        function clear(target, tag) {
+            var arr = target.querySelectorAll(tag);
+            for (var i = 0; i < arr.length; i++) {
+                target.children[i].className = '';
+            }
+        }
+
+        const imgLength = imgSrc.length;
+        var leftBtn = document.querySelector('.leftBtn');
+        var rightBtn = document.querySelector('.rightBtn');
+        var swiper = document.querySelector('.swiper');
+        var indicator = document.querySelector('.indicator');
+        var normal = document.querySelector('.normal');
+        var recycle = document.querySelector('.recycle');
+        var currentIndex = 0;
+        var method = 'normal';
+
+        swiper.setAttribute('data-title', imgSrc[0].title);
+
+        swiper.addEventListener('mouseover', function () {
+            leftBtn.style.display = 'block';
+            rightBtn.style.display = 'block';
+            leftBtn.className = 'leftBtn leftBtnIn';
+            rightBtn.className = 'rightBtn rightBtnIn';
+        })
+
+        swiper.addEventListener('mouseout', function () {
+            leftBtn.className = 'leftBtn leftBtnOut';
+            rightBtn.className = 'rightBtn rightBtnOut';
+        })
+
+        leftBtn.addEventListener('click', function () {
+            currentIndex = changeImg('left-' + method, swiper, imgSrc, currentIndex);
+            swiper.setAttribute('data-title', imgSrc[currentIndex].title);
+            clear(indicator, 'span');
+            indicator.children[currentIndex].className = 'spanHover';
+        })
+
+        rightBtn.addEventListener('click', function () {
+            currentIndex = changeImg('right-' + method, swiper, imgSrc, currentIndex);
+            swiper.setAttribute('data-title', imgSrc[currentIndex].title);
+            clear(indicator, 'span');
+            indicator.children[currentIndex].className = 'spanHover';
+        })
+
+        for (var i = 0; i < imgLength; i++) {
+            var dot = document.createElement('span');
+            dot.setAttribute('index', i);
+            if (i === 0) {
+                var img = document.createElement('img');
+                img.src = imgSrc[i].src;
+                swiper.appendChild(img);
+                dot.className = 'spanHover';
+            }
+            dot.addEventListener('click',function () {
+                currentIndex = parseInt(this.getAttribute('index'));
+                swiper.querySelector('img').src = imgSrc[currentIndex].src;
+                swiper.setAttribute('data-title', imgSrc[currentIndex].title);
+                clear(indicator, 'span');
+                indicator.children[currentIndex].className = 'spanHover';
+            })
+            indicator.appendChild(dot);
+        }
+
+        normal.addEventListener('click', function () {
+            method = 'normal';
+            this.className = 'normal selected';
+            recycle.className = 'recycle';
+        })
+
+        recycle.addEventListener('click', function () {
+            method = 'recycle';
+            normal.className = 'normal';
+            this.className = 'recycle selected';
+        })
+
+    </script>
+</body>
+
+</html>
