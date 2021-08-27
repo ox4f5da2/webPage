@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 1px solid transparent;
+        }
+
+        .swiper {
+            width: 603px;
+            height: 342px;
+            margin: 150px auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .swiper .imgBox{
+            width: 603px;
+            height: 298px;
+            position: relative;
+        }
+
+        .swiper .imgBox img {
+            width: 603px;
+            height: 298px;
+            position: absolute;
+            top: 0;
+            transition: all .5s;
+        }
+
+        .footer {
+            width: 100%;
+            height: 44px;
+        }
+
+        .footer span {
+            width: 20%;
+            height: 44px;
+            float: left;
+            text-align: center;
+            line-height: 44px;
+            background-color: #000;
+            color: #b1b2be;
+        }
+
+        .footer span:hover {
+            background-color: #262626;
+            color: #f3c258;
+            cursor: pointer;
+        }
+
+        .footer .selected {
+            background-color: #262626;
+            color: #f3c258;
+        }
+
+        .leftBtn,
+        .rightBtn {
+            z-index: 999;
+            position: absolute;
+            top: 50%;
+            width: 30px;
+            height: 60px;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, .3);
+        }
+
+        .leftBtn {
+            left: 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .rightBtn {
+            right: 0;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .leftBtn::before,
+        .rightBtn::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+
+        .leftBtn::before {
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: translate(-25%, -50%) rotate(45deg);
+        }
+
+        .rightBtn::before {
+            border-top: 2px solid #fff;
+            border-right: 2px solid #fff;
+            transform: translate(-75%, -50%) rotate(45deg);
+        }
+
+        .leftBtn:hover::before,
+        .rightBtn:hover::before {
+            border-color: orange;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="swiper">
+        <div class="imgBox">
+            <img src="https://ossweb-img.qq.com/upload/adw/image/20210825/cef3abd3dd7d05d29bd945df4a3bd7c1.jpeg" alt="">
+            <img src="https://ossweb-img.qq.com/upload/adw/image/20210826/952cf818f9d02b0289bbf02497fcc48d.jpeg" alt="">
+            <img src="https://ossweb-img.qq.com/upload/adw/image/20210824/7091011f930c137c036cb8c0ab38dc5f.jpeg" alt="">
+            <img src="https://ossweb-img.qq.com/upload/adw/image/20210826/09ebbf0172b1a69a9b97d275fafcb9b0.jpeg" alt="">
+            <img src="https://ossweb-img.qq.com/upload/adw/image/20210826/ac2cde258e694e008bd0e2d640df8744.jpeg" alt="">
+        </div>
+        <div class="footer">
+            <span class="selected">展示场景投票</span>
+            <span>GK晋级之路</span>
+            <span>见证智造</span>
+            <span>游戏赛道开启</span>
+            <span>最佳创意奖诞生</span>
+        </div>
+        <div class="leftBtn"></div>
+        <div class="rightBtn"></div>
+    </div>
+    <script>
+        function clearClass(span, idx) {
+            span.forEach(function (item) {
+                item.className = '';
+            })
+            span[idx].className = 'selected';
+        }
+
+        var imgs = document.querySelectorAll('.imgBox img');
+        var span = document.querySelectorAll('.footer span');
+        var leftBtn = document.querySelector('.leftBtn');
+        var rightBtn = document.querySelector('.rightBtn');
+        var currentIndex = 0;
+        const imgLength = imgs.length;
+
+        for (let i = 0; i < imgLength; i++) {
+            imgs[i].style.left = i * 603 + 'px';
+        }
+        span.forEach(function (item, idx) {
+            item.addEventListener('mouseover', function () {
+                imgs.forEach(function (item, i) {
+                    item.style.left = (i - idx) * 603 + 'px';
+                })
+                clearClass(span, idx);
+            })
+            item.addEventListener('mouseout', function () {
+                console.log('out')
+                imgs.forEach(function (item, i) {
+                    item.style.left = (i - currentIndex) * 603 + 'px';
+                })
+                clearClass(span, currentIndex);
+            })
+        })
+        rightBtn.addEventListener('click', function () {
+            if (currentIndex !== imgLength - 1) {
+                imgs.forEach(function (item, idx) {
+                    item.style.left = parseInt(item.style.left) - 603 + 'px';
+                })
+            }
+            currentIndex = (currentIndex === imgLength - 1 ? imgLength - 1 : ++currentIndex);
+            clearClass(span, currentIndex);
+        })
+        leftBtn.addEventListener('click', function () {
+            if (currentIndex !== 0) {
+                imgs.forEach(function (item, idx) {
+                    item.style.left = parseInt(item.style.left) + 603 + 'px';
+                })
+            }
+            currentIndex = (currentIndex === 0 ? 0 : --currentIndex);
+            clearClass(span, currentIndex);
+        })
+    </script>
+</body>
+
+</html>
