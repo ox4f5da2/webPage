@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>购物车</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            height: 100vh;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border: 1px solid transparent;
+        }
+
+        li {
+            list-style: none;
+        }
+
+        button {
+            background-color: transparent;
+            border: 0;
+        }
+
+        .price {
+            width: 600px;
+            height: 260px;
+            border-collapse: collapse;
+            text-align: center;
+            margin: 150px auto 0;
+        }
+
+        .price tr {
+            width: 100%;
+            height: 30px;
+        }
+
+        .price tbody img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .price tr th,
+        .price tbody tr td {
+            width: 25%;
+            border: 1px solid salmon;
+            font-size: 14px;
+        }
+
+        .price tr th {
+            height: 30px;
+            background-color: #cc3466;
+            color: #fff;
+            line-height: 30px;
+        }
+
+        .price tbody tr td {
+            height: 50px;
+            background-color: #fff;
+        }
+
+        .calculator {
+            width: 70px;
+            height: 20px;
+            margin: 0 auto;
+        }
+
+        .calculator button,
+        .calculator span {
+            float: left;
+            border: 1px solid #ccc;
+            height: 20px;
+        }
+
+        .calculator button {
+            width: 20px;
+            background-color: #ddd;
+            cursor: pointer;
+        }
+
+        .calculator span {
+            box-sizing: border-box;
+            width: 30px;
+            color: lightsalmon;
+        }
+
+        .footer {
+            width: 600px;
+            height: 30px;
+            background-color: #cc3466;
+            color: #fff;
+            line-height: 30px;
+            font-size: 14px;
+            margin: 10px auto;
+            border-radius: 5px;
+        }
+
+        .footer li {
+            width: 25%;
+            height: 30px;
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <table class="price">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+    <div class="footer">
+        <ul>
+            <li>合计费用: ¥<span>0</span></li>
+            <li>已选中商品: <span>0</span>件</li>
+        </ul>
+    </div>
+    <script>
+
+
+        var table = document.querySelector('.price');
+        var thead = document.querySelector('.price thead');
+        var tbody = document.querySelector('.price tbody');
+        var headList = ['商品', '单价', '数量', '小计'];
+        var goodsList = [
+            { src: "https://gw.alicdn.com/bao/uploaded/i3/2201227850912/O1CN0166vuA21Ibjs916Xl4_!!0-item_pic.jpg", price: 4799 },
+            { src: "https://gw.alicdn.com/bao/uploaded/i2/4102893187/O1CN01gmsnYH1ZPgxTkwGvB_!!0-item_pic.jpg", price: 278 },
+            { src: "https://gw.alicdn.com/bao/uploaded/i2/2200959651546/O1CN01JInjP01NI718Wj87v_!!0-item_pic.jpg", price: 11980 },
+            { src: "https://gw.alicdn.com/bao/uploaded/i1/1983725884/O1CN01NOXyPo1tKv3FBoWFT_!!0-item_pic.jpg", price: 498 },
+            { src: "https://gw.alicdn.com/bao/uploaded/i3/2201054585649/O1CN012wgOvt1rbI33z7VdS_!!0-item_pic.jpg", price: 1233 },
+        ];
+        const goodsLength = goodsList.length;
+        const headLength = headList.length;
+        // 按钮
+        function buttonClick(currentNode, type) {
+            let tr = currentNode.parentNode.parentNode.parentNode;
+            let idx = tr.index;
+            let parentNode = currentNode.parentNode
+            let span = parentNode.children[1];
+            let sub = parentNode.children[0];
+            let num = parseInt(span.textContent);
+            if (type === 'add') {
+                num = (num <= 99 ? ++num : 99);
+                sub.disabled = false;
+                sub.style.cursor = 'pointer';
+            }
+            else if (type === 'sub') {
+                num = (num <= 0 ? 0 : --num);
+                if (num === 0) {
+                    sub.disabled = true;
+                    sub.style.cursor = 'not-allowed';
+                }
+            }
+
+            span.innerHTML = num + '';
+            tr.children[3].innerHTML = num * parseInt(tr.children[1].textContent.substr(1));
+        }
+        // 计算总商品数和总价格
+        function calcParams() {
+            let allNum = 0;
+            let allPrice = 0;
+            let tr = tbody.querySelectorAll('tr');
+            for (let i = 0, len = tr.length; i < len; i++) {
+                allNum += parseInt(tr[i].children[2].querySelector('span').textContent);
+                allPrice += parseInt(tr[i].children[3].textContent);
+            }
+            let span = document.querySelectorAll('.footer ul li span');
+            span[0].innerHTML = allPrice;
+            span[1].innerHTML = allNum;
+        }
+
+        var tableHeadRow = document.createElement('tr');
+        var str = '';
+        for (let i = 0; i < headLength; i++) {
+            str += '<th>' + headList[i] + '</th>';
+        }
+        thead.innerHTML = str;
+
+        for (let i = 0; i < goodsLength; i++) {
+            str = '';
+            let tr = document.createElement('tr');
+            tr.index = i;
+            for (let j = 0; j < headLength; j++) {
+                if (j === 0) {
+                    str += '<td><img src="' + goodsList[i].src + '"alt=""></td>';
+                }
+                else if (j === 1) {
+                    str += '<td>¥' + goodsList[i].price + '</td>';
+                }
+                else if (j === headLength - 1) {
+                    str += '<td><div class="calculator"><button>-</button><span>0</span><button>+</button></div></td><td>0</td>';
+                }
+            }
+            tr.innerHTML += str;
+            tbody.appendChild(tr);
+        }
+
+        var button = document.querySelectorAll('.calculator button');
+        for (let i = 0, len = button.length; i < len; i++) {
+            if (i % 2 !== 0) {
+                // +
+                button[i].addEventListener('click', function () {
+                    buttonClick(this, 'add');
+                    calcParams();
+                });
+            }
+            else {
+                // -
+                button[i].disabled = true;
+                button[i].style.cursor = 'not-allowed'
+                button[i].addEventListener('click', function () {
+                    buttonClick(this, 'sub');
+                    calcParams();
+                });
+            }
+
+        }
+
+
+
+    </script>
+</body>
+
+</html>
